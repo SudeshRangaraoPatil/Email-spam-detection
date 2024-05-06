@@ -1,0 +1,24 @@
+import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.naive_bayes import MultinomialNB
+
+
+df['spam']= df['Category'].apply(lambda x: 'spam' if x == 'spam' else 'ham')
+x_train,x_test,y_train,y_test = train_test_split(df.Message, df.spam, test_size=0.2, random_state=42)
+
+
+cv= CountVectorizer()
+x_train_transform_matrix=cv.fit_transform(x_train.values)
+x_test_transform_matrix=cv.transform(x_test)
+
+
+model=MultinomialNB()
+model.fit(x_train_transform_matrix, y_train)
+y_pred = model.predict(x_test_transform_matrix)
+model.score(x_test_transform_matrix, y_test)
+
+
+text = ['it was nice day']
+model.predict(cv.transform(text))
